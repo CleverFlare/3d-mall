@@ -63,12 +63,16 @@ loader.load(
   },
   (xhr) => {
     const progress = (xhr.loaded / xhr.total) * 100;
+
+    console.log(progress);
+
     if (progressBar)
       (progressBar as Element & { style: { width: string } }).style.width =
         progress + "%";
 
     if (progress === 100)
       setTimeout(() => {
+        console.log("Should hide now");
         loading?.classList.add("hide");
       }, 1000);
   },
