@@ -52,39 +52,13 @@ let controlling = false;
 let model: GLTF | null = null;
 
 const loader = new GLTFLoader();
-loader.load(
-  "models/GLTF.gltf",
-  function (gltf) {
-    scene.add(gltf.scene);
-    model = gltf;
-    gltf.scene.position.y = -250;
-    gltf.scene.receiveShadow = true;
-    gltf.scene.castShadow = true;
-  },
-  (xhr) => {
-    const progress = (xhr.loaded / xhr.total) * 100;
-
-    console.log("Loaded", xhr.loaded);
-    console.log("Total", xhr.total);
-
-    console.log("Progress", progress);
-
-    if (progressBar)
-      (progressBar as Element & { style: { width: string } }).style.width =
-        progress + "%";
-
-    if (progress === 100)
-      setTimeout(() => {
-        console.log("Should hide now");
-        loading?.classList.add("hide");
-      }, 1000);
-
-    if (xhr.total === 0) loading?.remove();
-  },
-  (err) => {
-    console.log(err);
-  },
-);
+loader.load("models/GLTF.gltf", function (gltf) {
+  scene.add(gltf.scene);
+  model = gltf;
+  gltf.scene.position.y = -250;
+  gltf.scene.receiveShadow = true;
+  gltf.scene.castShadow = true;
+});
 
 camera.position.set(3527, 2025, 50);
 control.update();
