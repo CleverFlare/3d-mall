@@ -3,6 +3,9 @@ import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+const progressBar = document.querySelector(".progress");
+const loading = document.querySelector(".loading");
+
 const renderer = new THREE.WebGLRenderer();
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -49,13 +52,27 @@ let controlling = false;
 let model: GLTF | null = null;
 
 const loader = new GLTFLoader();
-loader.load("models/GLTF.gltf", function (gltf) {
-  scene.add(gltf.scene);
-  model = gltf;
-  gltf.scene.position.y = -250;
-  gltf.scene.receiveShadow = true;
-  gltf.scene.castShadow = true;
-});
+loader.load(
+  "models/GLTF.gltf",
+  function (gltf) {
+    scene.add(gltf.scene);
+    model = gltf;
+    gltf.scene.position.y = -250;
+    gltf.scene.receiveShadow = true;
+    gltf.scene.castShadow = true;
+  },
+  (xhr) => {
+    const progress = (xhr.loaded / xhr.total) * 100;
+    if (progressBar)
+      (progressBar as Element & { style: { width: string } }).style.width =
+        progress + "%";
+
+    if (progress === 100)
+      setTimeout(() => {
+        loading?.classList.add("hide");
+      }, 1000);
+  },
+);
 
 camera.position.set(3527, 2025, 50);
 control.update();
