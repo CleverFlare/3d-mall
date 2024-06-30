@@ -1,5 +1,6 @@
 import "./root.css";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const renderer = new THREE.WebGLRenderer();
@@ -14,20 +15,12 @@ const camera = new THREE.PerspectiveCamera(
   70,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000,
+  5000,
 );
 
 const control = new OrbitControls(camera, renderer.domElement);
 
-const boxGeometry = new THREE.BoxGeometry();
-
-const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-
-const box = new THREE.Mesh(boxGeometry, boxMaterial);
-
 renderer.setClearColor(0xf0e0d4, 1);
-
-scene.add(box);
 
 const ambientLight = new THREE.AmbientLight(0x444444);
 scene.add(ambientLight);
@@ -38,14 +31,19 @@ directionalLight.position.set(-30, 50, 0);
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.bottom = -12;
 
-// const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-// scene.add(dLightHelper);
+const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+scene.add(dLightHelper);
 
-// const dLightShadowHelper = new THREE.CameraHelper(
-//   directionalLight.shadow.camera,
-// );
-//
-// scene.add(dLightShadowHelper);
+const dLightShadowHelper = new THREE.CameraHelper(
+  directionalLight.shadow.camera,
+);
+
+scene.add(dLightShadowHelper);
+
+const loader = new GLTFLoader();
+loader.load("models/GLTF.gltf", function (gltf) {
+  scene.add(gltf.scene);
+});
 
 camera.position.set(0, 0, 5);
 control.update();
