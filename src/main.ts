@@ -52,6 +52,7 @@ let model: GLTF | null = null;
 const loader = new GLTFLoader();
 loader.load("models/GLTF.gltf", function (gltf) {
   scene.add(gltf.scene);
+  model = gltf;
   gltf.scene.position.y = -250;
   gltf.scene.receiveShadow = true;
   gltf.scene.castShadow = true;
@@ -68,7 +69,7 @@ window.addEventListener("pointerup", () => {
 });
 
 function animate() {
-  // if (model && !controlling) model.scene.rotation.y += 0.01;
+  if (model && !controlling) model.scene.rotation.y += 0.01;
   // directionalLight.position.set(options.x, options.y, options.z);
   renderer.render(scene, camera);
 }
