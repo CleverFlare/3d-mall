@@ -1,6 +1,7 @@
+import { GUI } from "dat.gui";
 import "./root.css";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const renderer = new THREE.WebGLRenderer();
@@ -22,33 +23,53 @@ const control = new OrbitControls(camera, renderer.domElement);
 
 renderer.setClearColor(0xf0e0d4, 1);
 
-const ambientLight = new THREE.AmbientLight(0x444444);
+const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
-directionalLight.position.set(-30, 50, 0);
-directionalLight.castShadow = true;
-directionalLight.shadow.camera.bottom = -12;
+// directionalLight.position.set(-1227, 1182, 0);
 
 const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
 scene.add(dLightHelper);
 
-const dLightShadowHelper = new THREE.CameraHelper(
-  directionalLight.shadow.camera,
-);
+// const gui = new GUI();
+//
+// const options = {
+//   x: -30,
+//   y: 50,
+//   z: 0,
+// };
+//
+// gui.add(options, "x", -5000, 5000);
+// gui.add(options, "y", 0, 5000);
+// gui.add(options, "z", 0, 5000);
 
-scene.add(dLightShadowHelper);
+let controlling = false;
+
+let model: GLTF | null = null;
 
 const loader = new GLTFLoader();
 loader.load("models/GLTF.gltf", function (gltf) {
   scene.add(gltf.scene);
+  gltf.scene.position.y = -250;
+  gltf.scene.receiveShadow = true;
+  gltf.scene.castShadow = true;
 });
 
-camera.position.set(0, 0, 5);
+camera.position.set(3527, 2025, 50);
 control.update();
 
+window.addEventListener("pointerdown", () => {
+  controlling = true;
+});
+window.addEventListener("pointerup", () => {
+  controlling = false;
+});
+
 function animate() {
+  // if (model && !controlling) model.scene.rotation.y += 0.01;
+  // directionalLight.position.set(options.x, options.y, options.z);
   renderer.render(scene, camera);
 }
 
