@@ -78,6 +78,11 @@ loader.load(
         console.log("Should hide now");
         loading?.classList.add("hide");
       }, 1000);
+
+    if (xhr.total === 0) loading?.remove();
+  },
+  (err) => {
+    console.log(err);
   },
 );
 
