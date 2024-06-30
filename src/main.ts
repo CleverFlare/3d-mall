@@ -1,4 +1,3 @@
-import { GUI } from "dat.gui";
 import "./root.css";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
