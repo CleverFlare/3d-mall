@@ -30,8 +30,8 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
 // directionalLight.position.set(-1227, 1182, 0);
 
-const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-scene.add(dLightHelper);
+// const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+// scene.add(dLightHelper);
 
 // const gui = new GUI();
 //
