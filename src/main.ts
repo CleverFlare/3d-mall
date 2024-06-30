@@ -64,7 +64,10 @@ loader.load(
   (xhr) => {
     const progress = (xhr.loaded / xhr.total) * 100;
 
-    console.log(progress);
+    console.log("Loaded", xhr.loaded);
+    console.log("Total", xhr.total);
+
+    console.log("Progress", progress);
 
     if (progressBar)
       (progressBar as Element & { style: { width: string } }).style.width =
