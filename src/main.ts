@@ -1,16 +1,17 @@
 import "./root.css";
 import * as THREE from "three";
 import {
-  GLTF,
+  // GLTF,
   GLTFLoader,
-  Line2,
-  LineGeometry,
-  LineMaterial,
+  // Line2,
+  // LineGeometry,
+  // LineMaterial,
 } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import { areas } from "./areas";
 import { aStarPathfinder } from "./a-star";
+import { roundedCornerLine } from "./rounded-corner-line";
 
 // const progressBar = document.querySelector(".progress");
 // const loading = document.querySelector(".loading");
@@ -83,8 +84,6 @@ const goalPoint = 7;
 
 const rightPath = aStarPathfinder(startPoint, goalPoint, points);
 
-console.log(rightPath);
-
 // const optimalPath = aStar(points, startPoint, goalPoint);
 
 // console.log(optimalPath);
@@ -123,25 +122,64 @@ console.log(rightPath);
 // cibATMSphere.position.set(804, groundYAxis, -550);
 // scene.add(cibATMSphere);
 //
-// const techCenterSphere = new THREE.Mesh(sphereGeom, blueMaterial);
-// techCenterSphere.castShadow = true;
-// techCenterSphere.position.set(1870, groundYAxis, -600);
-// scene.add(techCenterSphere);
+const testSphere = new THREE.Mesh(sphereGeom, blueMaterial);
+testSphere.castShadow = true;
+scene.add(testSphere);
 
-var path = new THREE.CatmullRomCurve3(rightPath!, false, "catmullrom", 0.05);
-var tubeGeometry = new THREE.TubeGeometry(path, 64, 20, 8, false);
-var tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x0098ff });
-var tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
-scene.add(tubeMesh);
+// // Create a CurvePath
+// const curvePath = new THREE.CurvePath();
 
-let controlling = false;
+// Add straight lines and bezier curves to the CurvePath
+// for (let i = 0; i < rightPath.length - 1; i++) {
+//   if (i > 0)
+//     curvePath.add(new THREE.LineCurve3(rightPath[i], rightPath[i - 1]));
+//   else curvePath.add(new THREE.LineCurve3(rightPath[i]));
+// const startPoint = new THREE.Vector3(
+//   rightPath[i].x,
+//   rightPath[i].y,
+//   rightPath[i].z,
+// );
+// const endPoint = new THREE.Vector3(
+//   rightPath[i + 1].x,
+//   rightPath[i + 1].y,
+//   rightPath[i + 1].z,
+// );
+//
+// if (i === 0) {
+//   // Start with a LineCurve3
+//   curvePath.add(new THREE.LineCurve3(startPoint, endPoint));
+// } else {
+//   // Use QuadraticBezierCurve3 for rounded corners
+//   const previousPoint = new THREE.Vector3(
+//     rightPath[i - 1].x,
+//     rightPath[i - 1].y,
+//     rightPath[i - 1].z,
+//   );
+//   const controlPoint = new THREE.Vector3()
+//     .copy(startPoint)
+//     .lerp(previousPoint, 0.5);
+//
+//   curvePath.add(
+//     new THREE.QuadraticBezierCurve3(previousPoint, controlPoint, startPoint),
+//   );
+// }
+// }
 
-let model: GLTF | null = null;
+let lineGeometry = roundedCornerLine(rightPath, 20, 12, false);
+let lineMaterial = new THREE.LineBasicMaterial({ color: 0x0098ff });
+
+let line = new THREE.Line(lineGeometry, lineMaterial);
+
+scene.add(line);
+
+// let controlling = false;
+
+// let model: GLTF | null = null;
 
 const loader = new GLTFLoader();
 loader.load("models/GLTF.gltf", function (gltf) {
   scene.add(gltf.scene);
-  model = gltf;
+  // model = gltf;
   gltf.scene.position.y = -250;
   gltf.scene.receiveShadow = true;
 });
@@ -150,16 +188,16 @@ camera.position.set(3527, 2025, 50);
 camera.lookAt(new THREE.Vector3(2065, 0, 384));
 control.update();
 
-window.addEventListener("pointerdown", () => {
-  controlling = true;
-});
-window.addEventListener("pointerup", () => {
-  controlling = false;
-});
+// window.addEventListener("pointerdown", () => {
+//   controlling = true;
+// });
+// window.addEventListener("pointerup", () => {
+//   controlling = false;
+// });
 
 function animate() {
   // if (model && !controlling) model.scene.rotation.y += 0.01;
-  // techCenterSphere.position.set(options.x, groundYAxis, options.z);
+  testSphere.position.set(options.x, groundYAxis, options.z);
   renderer.render(scene, camera);
 }
 
