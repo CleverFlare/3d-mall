@@ -1,20 +1,10 @@
 import "./root.css";
 import * as THREE from "three";
-import {
-  // GLTF,
-  GLTFLoader,
-  // Line2,
-  // LineGeometry,
-  // LineMaterial,
-} from "three/examples/jsm/Addons.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import { areas } from "./areas";
 import { aStarPathfinder } from "./a-star";
-import { roundedCornerLine } from "./rounded-corner-line";
-
-// const progressBar = document.querySelector(".progress");
-// const loading = document.querySelector(".loading");
 
 const renderer = new THREE.WebGLRenderer();
 
@@ -35,11 +25,19 @@ const control = new OrbitControls(camera, renderer.domElement);
 
 renderer.setClearColor(0xf0e0d4, 1);
 
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
 const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
+
+const spotLight = new THREE.SpotLight(0xffffff, 3, 100, 0.2, 0.5);
+spotLight.position.set(0, 25, 0);
+scene.add(spotLight);
 // directionalLight.position.set(-1227, 1182, 0);
 
 // const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
@@ -57,24 +55,17 @@ gui.add(options, "x");
 gui.add(options, "y");
 gui.add(options, "z");
 
-const sphereGeom = new THREE.SphereGeometry(40, 32, 16);
-const blueMaterial = new THREE.MeshBasicMaterial({
-  color: 0xffffff,
-  transparent: true,
-  opacity: 0.5,
-});
-
 const groundYAxis = -130;
 
-for (const area of areas) {
-  // if (area.type === "crossroad") continue;
-  const mesh = new THREE.Mesh(sphereGeom, blueMaterial);
-  mesh.position.set(area.x, groundYAxis, area.z);
-  mesh.castShadow = true;
-  scene.add(mesh);
-}
+// for (const area of areas) {
+//   // if (area.type === "crossroad") continue;
+//   const mesh = new THREE.Mesh(sphereGeom, blueMaterial);
+//   mesh.position.set(area.x, groundYAxis, area.z);
+//   mesh.castShadow = true;
+//   scene.add(mesh);
+// }
 
-const points = areas.map((area) => ({
+const pathPoints = areas.map((area) => ({
   position: new THREE.Vector3(area.x, groundYAxis, area.z),
   neighbors: area.neighbors,
 }));
@@ -82,20 +73,40 @@ const points = areas.map((area) => ({
 const startPoint = 0;
 const goalPoint = 7;
 
-const rightPath = aStarPathfinder(startPoint, goalPoint, points);
+const startSphereGeometry = new THREE.SphereGeometry(60, 32, 16);
+const goalSphereGeometry = new THREE.SphereGeometry(40, 32, 16);
+const blueMaterial = new THREE.MeshBasicMaterial({
+  color: 0x00ff00,
+  transparent: true,
+});
+const whiteMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  transparent: true,
+});
+
+const startPointSphere = new THREE.Mesh(startSphereGeometry, whiteMaterial);
+startPointSphere.position.set(
+  areas[startPoint].x,
+  groundYAxis,
+  areas[startPoint].z,
+);
+scene.add(startPointSphere);
+
+const gaolPointSphere = new THREE.Mesh(goalSphereGeometry, blueMaterial);
+gaolPointSphere.position.set(
+  areas[goalPoint].x,
+  groundYAxis,
+  areas[goalPoint].z,
+);
+scene.add(gaolPointSphere);
+
+const rightPath = aStarPathfinder(startPoint, goalPoint, pathPoints);
 
 // const optimalPath = aStar(points, startPoint, goalPoint);
 
 // console.log(optimalPath);
 
-// enteranceSphere.position.set(2065, groundYAxis, 384);
-// enteranceSphere.castShadow = true;
-// scene.add(enteranceSphere);
 //
-// const firstCrossSphere = new THREE.Mesh(sphereGeom, blueMaterial);
-// firstCrossSphere.castShadow = true;
-// firstCrossSphere.position.set(1870, groundYAxis, 384);
-// scene.add(firstCrossSphere);
 //
 // const playerAreaSphere = new THREE.Mesh(sphereGeom, blueMaterial);
 // playerAreaSphere.castShadow = true;
@@ -122,9 +133,9 @@ const rightPath = aStarPathfinder(startPoint, goalPoint, points);
 // cibATMSphere.position.set(804, groundYAxis, -550);
 // scene.add(cibATMSphere);
 //
-const testSphere = new THREE.Mesh(sphereGeom, blueMaterial);
-testSphere.castShadow = true;
-scene.add(testSphere);
+// const testSphere = new THREE.Mesh(sphereGeom, blueMaterial);
+// testSphere.castShadow = true;
+// scene.add(testSphere);
 
 // // Create a CurvePath
 // const curvePath = new THREE.CurvePath();
@@ -165,14 +176,19 @@ scene.add(testSphere);
 // }
 // }
 
-let lineGeometry = roundedCornerLine(rightPath, 20, 12, false);
-let lineMaterial = new THREE.LineBasicMaterial({ color: 0x0098ff });
+// let lineGeometry = roundedCornerLine(rightPath, 20, 12, false);
+// let lineMaterial = new THREE.LineBasicMaterial({ color: 0x0098ff });
+//
+// let line = new THREE.Line(lineGeometry, lineMaterial);
+//
+// scene.add(line);
 
-let line = new THREE.Line(lineGeometry, lineMaterial);
+const curve = new THREE.CatmullRomCurve3(rightPath, false, "catmullrom", 0);
 
-scene.add(line);
-
-// let controlling = false;
+const tubeGeometry = new THREE.TubeGeometry(curve, 65, 30, 65);
+const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+scene.add(tube);
 
 // let model: GLTF | null = null;
 
@@ -184,20 +200,30 @@ loader.load("models/GLTF.gltf", function (gltf) {
   gltf.scene.receiveShadow = true;
 });
 
+let pinModel: GLTF | null = null;
+
+loader.load("models/pin.glb", function (gltf) {
+  scene.add(gltf.scene);
+  pinModel = gltf;
+  gltf.scene.scale.set(350, 350, 350);
+  gltf.scene.position.set(areas[goalPoint].x, groundYAxis, areas[goalPoint].z);
+});
+
 camera.position.set(3527, 2025, 50);
-camera.lookAt(new THREE.Vector3(2065, 0, 384));
+camera.lookAt(scene.position); //add this line
 control.update();
 
-// window.addEventListener("pointerdown", () => {
-//   controlling = true;
-// });
-// window.addEventListener("pointerup", () => {
-//   controlling = false;
-// });
+let step = 0;
+let speed = 0.05;
 
 function animate() {
   // if (model && !controlling) model.scene.rotation.y += 0.01;
-  testSphere.position.set(options.x, groundYAxis, options.z);
+  // model?.scene.position.set(options.x, groundYAxis, options.z);
+  if (pinModel !== null) {
+    step += speed;
+    pinModel.scene.position.y = 50 * Math.sin(step);
+    pinModel.scene.rotation.y += 0.05;
+  }
   renderer.render(scene, camera);
 }
 
