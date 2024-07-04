@@ -3,9 +3,8 @@ import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
-import { areas } from "./areas";
-import { aStarPathfinder } from "./a-star";
 import "./search-functionality";
+import { Pathfinding } from "./pathfinding-class";
 
 const renderer = new THREE.WebGLRenderer();
 
@@ -56,7 +55,7 @@ scene.add(spotLight);
 // gui.add(options, "y");
 // gui.add(options, "z");
 
-const groundYAxis = -130;
+export const groundYAxis = -130;
 
 // for (const area of areas) {
 //   // if (area.type === "crossroad") continue;
@@ -65,43 +64,6 @@ const groundYAxis = -130;
 //   mesh.castShadow = true;
 //   scene.add(mesh);
 // }
-
-const pathPoints = areas.map((area) => ({
-  position: new THREE.Vector3(area.x, groundYAxis, area.z),
-  neighbors: area.neighbors,
-}));
-
-const startPoint = 0;
-const goalPoint = 7;
-
-const startSphereGeometry = new THREE.SphereGeometry(60, 32, 16);
-const goalSphereGeometry = new THREE.SphereGeometry(40, 32, 16);
-const blueMaterial = new THREE.MeshBasicMaterial({
-  color: 0x00ff00,
-  transparent: true,
-});
-const whiteMaterial = new THREE.MeshBasicMaterial({
-  color: 0xffffff,
-  transparent: true,
-});
-
-const startPointSphere = new THREE.Mesh(startSphereGeometry, whiteMaterial);
-startPointSphere.position.set(
-  areas[startPoint].x,
-  groundYAxis,
-  areas[startPoint].z,
-);
-scene.add(startPointSphere);
-
-const gaolPointSphere = new THREE.Mesh(goalSphereGeometry, blueMaterial);
-gaolPointSphere.position.set(
-  areas[goalPoint].x,
-  groundYAxis,
-  areas[goalPoint].z,
-);
-scene.add(gaolPointSphere);
-
-const rightPath = aStarPathfinder(startPoint, goalPoint, pathPoints);
 
 // const optimalPath = aStar(points, startPoint, goalPoint);
 
@@ -184,30 +146,17 @@ const rightPath = aStarPathfinder(startPoint, goalPoint, pathPoints);
 //
 // scene.add(line);
 
-const curve = new THREE.CatmullRomCurve3(rightPath, false, "catmullrom", 0);
-
-const tubeGeometry = new THREE.TubeGeometry(curve, 65, 30, 65);
-const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
-scene.add(tube);
-
 // let model: GLTF | null = null;
 
+export const pathfinding = new Pathfinding(scene);
+
 const loader = new GLTFLoader();
+
 loader.load("models/GLTF.gltf", function (gltf) {
   scene.add(gltf.scene);
   // model = gltf;
   gltf.scene.position.y = -250;
   gltf.scene.receiveShadow = true;
-});
-
-let pinModel: GLTF | null = null;
-
-loader.load("models/pin.glb", function (gltf) {
-  scene.add(gltf.scene);
-  pinModel = gltf;
-  gltf.scene.scale.set(350, 350, 350);
-  gltf.scene.position.set(areas[goalPoint].x, groundYAxis, areas[goalPoint].z);
 });
 
 camera.position.set(3527, 2025, 50);
@@ -220,10 +169,10 @@ let speed = 0.05;
 function animate() {
   // if (model && !controlling) model.scene.rotation.y += 0.01;
   // model?.scene.position.set(options.x, groundYAxis, options.z);
-  if (pinModel !== null) {
+  if (pathfinding.pinMesh) {
     step += speed;
-    pinModel.scene.position.y = 50 * Math.sin(step);
-    pinModel.scene.rotation.y += 0.05;
+    pathfinding.pinMesh.scene.position.y = 50 * Math.sin(step);
+    pathfinding.pinMesh.scene.rotation.y += 0.05;
   }
   renderer.render(scene, camera);
 }

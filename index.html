@@ -13,22 +13,24 @@
       class="absolute left-1/2 -translate-x-1/2 top-10 backdrop-blur-sm bg-white/25 w-max rounded-lg border border-white/25 p-4 flex gap-2 flex-wrap md:flex-row flex-col"
       id="search-form"
     >
-      <div class="relative" id="location-input">
+      <div class="relative" id="location-input-container">
         <input
           type="text"
           class="placeholder-shown:bg-transparent bg-white/50 border border-white placeholder-zinc-500 rounded-lg px-2 py-1 focus:outline-purple-600 focus:bg-white transition-colors cursor-pointer"
           placeholder="Your location"
+          id="location-input"
         />
         <div
           class="absolute top-full translate-y-1 left-0 w-full bg-white rounded-lg py-2 flex flex-col backdrop-blur-sm z-50"
           id="sections"
         ></div>
       </div>
-      <div class="relative" id="destination-input">
+      <div class="relative" id="destination-input-container">
         <input
           type="text"
           class="placeholder-shown:bg-transparent bg-white/50 border border-white placeholder-zinc-500 rounded-lg px-2 py-1 focus:outline-purple-600 focus:bg-white transition-colors duration-100 cursor-pointer"
           placeholder="Your destination"
+          id="destination-input"
         />
         <div
           class="absolute top-full translate-y-1 left-0 w-full bg-white rounded-lg py-2 flex flex-col backdrop-blur-sm z-50"

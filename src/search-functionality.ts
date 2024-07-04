@@ -1,6 +1,17 @@
 import { areas } from "./areas";
+import { pathfinding } from "./main";
+
 const sectionsList = document.querySelectorAll("#sections");
+
 const searchForm = document.querySelector("#search-form") as HTMLFormElement;
+
+const locationInput = document.querySelector(
+  "#location-input",
+) as HTMLInputElement;
+
+const destinationInput = document.querySelector(
+  "#destination-input",
+) as HTMLInputElement;
 
 function createSectionButton(content: string) {
   const button = document.createElement("button");
@@ -77,4 +88,26 @@ document.addEventListener("click", (e) => {
   }
 });
 
-searchForm.addEventListener("submit", (e) => e.preventDefault());
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (
+    !locationInput.value ||
+    !destinationInput.value ||
+    locationInput.value === destinationInput.value
+  ) {
+    pathfinding.clear();
+    return;
+  }
+
+  const startIndex = areas.findIndex(
+    (area) => area.type === "destination" && area.name === locationInput.value,
+  );
+
+  const goalIndex = areas.findIndex(
+    (area) =>
+      area.type === "destination" && area.name === destinationInput.value,
+  );
+
+  pathfinding.update({ start: startIndex, goal: goalIndex });
+});
