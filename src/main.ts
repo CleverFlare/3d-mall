@@ -2,7 +2,7 @@ import "./root.css";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
+// import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import { areas } from "./areas";
 import { aStarPathfinder } from "./a-star";
 import "./search-functionality";
@@ -44,17 +44,17 @@ scene.add(spotLight);
 // const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
 // scene.add(dLightHelper);
 
-const gui = new GUI();
-
-const options = {
-  x: 0,
-  y: 0,
-  z: 0,
-};
-
-gui.add(options, "x");
-gui.add(options, "y");
-gui.add(options, "z");
+// const gui = new GUI();
+//
+// const options = {
+//   x: 0,
+//   y: 0,
+//   z: 0,
+// };
+//
+// gui.add(options, "x");
+// gui.add(options, "y");
+// gui.add(options, "z");
 
 const groundYAxis = -130;
 
