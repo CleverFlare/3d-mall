@@ -3,11 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="./src/root.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
   </head>
   <body>
     <div id="app"></div>
+    <form
+      class="absolute left-1/2 -translate-x-1/2 top-10 backdrop-blur-sm bg-white/25 w-max rounded-lg border border-white/25 p-4 flex gap-2 flex-wrap md:flex-row flex-col"
+      id="search-form"
+    >
+      <div class="relative" id="location-input">
+        <input
+          type="text"
+          class="placeholder-shown:bg-transparent bg-white/50 border border-white placeholder-zinc-500 rounded-lg px-2 py-1 focus:outline-purple-600 focus:bg-white transition-colors cursor-pointer"
+          placeholder="Your location"
+        />
+        <div
+          class="absolute top-full translate-y-1 left-0 w-full bg-white rounded-lg py-2 flex flex-col backdrop-blur-sm z-50"
+          id="sections"
+        ></div>
+      </div>
+      <div class="relative" id="destination-input">
+        <input
+          type="text"
+          class="placeholder-shown:bg-transparent bg-white/50 border border-white placeholder-zinc-500 rounded-lg px-2 py-1 focus:outline-purple-600 focus:bg-white transition-colors duration-100 cursor-pointer"
+          placeholder="Your destination"
+        />
+        <div
+          class="absolute top-full translate-y-1 left-0 w-full bg-white rounded-lg py-2 flex flex-col backdrop-blur-sm z-50"
+          id="sections"
+        ></div>
+      </div>
+      <button
+        class="rounded-lg bg-purple-600 border border-purple-700 text-white px-2 py-1 h-full cursor-pointer hover:bg-purple-700"
+      >
+        Search
+      </button>
+    </form>
     <!-- <div class="loading"> -->
     <!--   <h2 class="title">3D Mall</h2> -->
     <!--   <div class="progress-parent"> -->

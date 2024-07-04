@@ -5,6 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import { areas } from "./areas";
 import { aStarPathfinder } from "./a-star";
+import "./search-functionality";
 
 const renderer = new THREE.WebGLRenderer();
 
