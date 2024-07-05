@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "./search-functionality";
-import { Pathfinding } from "./pathfinding-class";
+import { Pathfinding } from "./pathfinding";
 
 const renderer = new THREE.WebGLRenderer();
 
