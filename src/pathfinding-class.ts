@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { areas } from "./areas";
-import { groundYAxis } from "./main";
+import { GROUND_Y_AXIS } from "./main";
 import { aStarPathfinder } from "./a-star";
 import { GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 
@@ -16,7 +16,7 @@ export class Pathfinding {
 
   constructor(public scene: THREE.Scene) {
     this.paths = areas.map((area) => ({
-      position: new THREE.Vector3(area.x, groundYAxis, area.z),
+      position: new THREE.Vector3(area.x, GROUND_Y_AXIS, area.z),
       neighbors: area.neighbors,
     }));
 
@@ -65,20 +65,20 @@ export class Pathfinding {
 
     this.startMesh.position.set(
       areas[this.start].x,
-      groundYAxis,
+      GROUND_Y_AXIS,
       areas[this.start].z,
     );
 
     this.goalMesh.position.set(
       areas[this.goal].x,
-      groundYAxis,
+      GROUND_Y_AXIS,
       areas[this.goal].z,
     );
 
     if (this.pinMesh)
       this.pinMesh.scene.position.set(
         areas[this.goal].x,
-        groundYAxis,
+        GROUND_Y_AXIS,
         areas[this.goal].z,
       );
 
