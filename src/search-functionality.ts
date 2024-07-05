@@ -109,5 +109,5 @@ searchForm.addEventListener("submit", (e) => {
       area.type === "destination" && area.name === destinationInput.value,
   );
 
-  pathfinding.update({ start: startIndex, goal: goalIndex });
+  pathfinding.update(startIndex, goalIndex);
 });

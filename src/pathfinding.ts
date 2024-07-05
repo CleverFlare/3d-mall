@@ -46,15 +46,16 @@ export class Pathfinding {
     });
   }
 
-  update({ start, goal }: { start?: number; goal?: number }) {
-    if (start) this.start = start;
-    if (goal) this.goal = goal;
+  update(start: number, goal: number) {
+    this.start = start;
+    this.goal = goal;
 
     this.updatePath();
   }
 
   updatePath() {
     this.clear();
+
     const path = aStarPathfinder(this.start, this.goal, this.paths);
 
     const curve = new THREE.CatmullRomCurve3(path, false, "catmullrom", 0);
