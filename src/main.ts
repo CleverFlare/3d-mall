@@ -51,7 +51,6 @@ loader.load("models/GLTF.gltf", function (gltf) {
 });
 
 camera.position.set(3527, 2025, 50);
-camera.lookAt(scene.position); //add this line
 control.update();
 
 let step = 0;
