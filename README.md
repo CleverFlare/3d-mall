@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Three.js-white?logo=three.js&logoColor=%23000000" />
   <img src="https://img.shields.io/badge/Vite-purple?logo=vite&logoColor=%23ffffff" />
   <img src="https://img.shields.io/badge/TypeScript-blue?logo=typescript&logoColor=%23ffffff" />
-  <img src="https://img.shields.io/badge/Tailwind-skyblue?logo=tailwindcss&logoColor=%23000000" />
+  <img src="https://img.shields.io/badge/Tailwind CSS-skyblue?logo=tailwindcss&logoColor=%23000000" />
 </p>
 
 # 3D Mall
