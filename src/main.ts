@@ -1,6 +1,6 @@
 import "./root.css";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "./search-functionality";
 import { Pathfinding } from "./pathfinding";
@@ -28,8 +28,8 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.setPixelRatio(window.devicePixelRatio);
 
-const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(ambientLight);
+const ambientLight1 = new THREE.AmbientLight(0xffffff, 2);
+scene.add(ambientLight1);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
@@ -44,10 +44,23 @@ export const pathfinding = new Pathfinding(scene);
 
 const loader = new GLTFLoader();
 
-loader.load("models/GLTF.gltf", function (gltf) {
+const dracoLoader = new DRACOLoader();
+
+dracoLoader.setDecoderPath("/draco/");
+
+loader.setDRACOLoader(dracoLoader);
+
+loader.load("models/Madinty.glb", function (gltf) {
   scene.add(gltf.scene);
+  gltf.scene.scale.set(2000, 2000, 2000);
   gltf.scene.position.y = -250;
-  gltf.scene.receiveShadow = true;
+
+  // ✅ Force camera to look at model
+  const box = new THREE.Box3().setFromObject(gltf.scene);
+  const center = box.getCenter(new THREE.Vector3());
+
+  control.target.copy(center);
+  control.update();
 });
 
 camera.position.set(3527, 2025, 50);

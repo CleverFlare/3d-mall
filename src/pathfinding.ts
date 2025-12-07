@@ -20,8 +20,8 @@ export class Pathfinding {
       neighbors: area.neighbors,
     }));
 
-    const startSphereGeometry = new THREE.SphereGeometry(60, 32, 16);
-    const goalSphereGeometry = new THREE.SphereGeometry(40, 32, 16);
+    const startSphereGeometry = new THREE.SphereGeometry(40, 32, 16);
+    const goalSphereGeometry = new THREE.SphereGeometry(20, 32, 16);
     const blueMaterial = new THREE.MeshBasicMaterial({
       color: 0x00ff00,
       transparent: true,
@@ -60,7 +60,7 @@ export class Pathfinding {
 
     const curve = new THREE.CatmullRomCurve3(path, false, "catmullrom", 0);
 
-    const tubeGeometry = new THREE.TubeGeometry(curve, 65, 30, 65);
+    const tubeGeometry = new THREE.TubeGeometry(curve, 65, 10, 65);
     const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     this.lineMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
 
