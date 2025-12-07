@@ -28,7 +28,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.setPixelRatio(window.devicePixelRatio);
 
-const ambientLight1 = new THREE.AmbientLight(0xffffff, 2);
+const ambientLight1 = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(ambientLight1);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -54,6 +54,9 @@ loader.load("models/Madinty.glb", function (gltf) {
   scene.add(gltf.scene);
   gltf.scene.scale.set(2000, 2000, 2000);
   gltf.scene.position.y = -250;
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 4);
+  gltf.scene.add(ambientLight);
 
   // ✅ Force camera to look at model
   const box = new THREE.Box3().setFromObject(gltf.scene);
