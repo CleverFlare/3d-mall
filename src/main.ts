@@ -4,6 +4,21 @@ import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "./search-functionality";
 import { Pathfinding } from "./pathfinding";
+import { GUI } from "lil-gui";
+
+export const GROUND_Y_AXIS = -130;
+
+const gui = new GUI();
+
+const controls = {
+  x: 0,
+  z: 0,
+};
+
+gui.add(controls, "x");
+gui.add(controls, "z");
+
+gui.hide();
 
 const renderer = new THREE.WebGLRenderer();
 
@@ -21,6 +36,17 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 const control = new OrbitControls(camera, renderer.domElement);
+
+const sphereGeometry = new THREE.SphereGeometry(40, 32, 16);
+
+const sphereMaterial = new THREE.MeshBasicMaterial({
+  color: 0x00ff00,
+  transparent: true,
+});
+
+const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+// scene.add(sphereMesh);
 
 // Limit the rotation (prevent revealing the bottom)
 control.minPolarAngle = 0.3;
@@ -46,8 +72,6 @@ scene.add(directionalLight);
 const spotLight = new THREE.SpotLight(0xffffff, 3, 100, 0.2, 0.5);
 spotLight.position.set(0, 25, 0);
 scene.add(spotLight);
-
-export const GROUND_Y_AXIS = -130;
 
 export const pathfinding = new Pathfinding(scene);
 
@@ -102,6 +126,9 @@ function animate() {
     pathfinding.pinMesh.scene.position.y = 50 * Math.sin(step);
     pathfinding.pinMesh.scene.rotation.y += 0.05;
   }
+
+  sphereMesh.position.set(controls.x, GROUND_Y_AXIS, controls.z);
+
   renderer.render(scene, camera);
 }
 

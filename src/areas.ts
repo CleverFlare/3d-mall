@@ -7,24 +7,30 @@ export type Area = (
 
 export const areas: Area[] = [
   {
-    name: "Parking",
+    name: "Crave",
     type: "destination",
-    x: 0,
-    z: 1500,
+    x: 350,
+    z: 1250,
     neighbors: [1],
   },
   {
     type: "crossroad",
-    x: -350,
-    z: 1500,
+    x: -370,
+    z: 1250,
     neighbors: [0, 2],
   },
   {
-    name: "Al-Magrabi",
+    type: "crossroad",
+    x: -370,
+    z: 1100,
+    neighbors: [1, 3],
+  },
+  {
+    name: "Magrabi",
     type: "destination",
-    x: -350,
-    z: 790,
-    neighbors: [1],
+    x: -1100,
+    z: 1100,
+    neighbors: [2],
   },
   // {
   //   name: "Technology Center",
