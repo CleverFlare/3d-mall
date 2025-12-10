@@ -22,6 +22,15 @@ const camera = new THREE.PerspectiveCamera(
 
 const control = new OrbitControls(camera, renderer.domElement);
 
+// Limit the rotation (prevent revealing the bottom)
+control.minPolarAngle = 0.3;
+control.maxPolarAngle = Math.PI * 0.5;
+
+// Prevent flipping or weird rotations
+control.enablePan = false;
+control.enableZoom = true;
+control.screenSpacePanning = false;
+
 renderer.setClearColor(0xf0e0d4, 1);
 
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -58,16 +67,31 @@ loader.load("models/Madinty.glb", function (gltf) {
   const ambientLight = new THREE.AmbientLight(0xffffff, 4);
   gltf.scene.add(ambientLight);
 
-  // ✅ Force camera to look at model
+  // Compute center of the model
   const box = new THREE.Box3().setFromObject(gltf.scene);
   const center = box.getCenter(new THREE.Vector3());
 
+  // Desired offset: in FRONT of the model
+  // Assuming +Z is “front”. If your model's forward axis is -Z, reverse this.
+  const distance = 3000; // adjust as needed
+  const vertical = 1500; // height of the camera
+
+  // Move camera in front
+  const offset = new THREE.Vector3(0, vertical, distance);
+
+  // OPTIONAL: rotate offset 90° around Y-axis
+  // If you need the camera to rotate to the front relative to the current side view:
+  offset.applyAxisAngle(new THREE.Vector3(1, 0, 0), 0); // no X rotation
+  offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), (Math.PI / 2) * 4); // rotate 90°
+  offset.applyAxisAngle(new THREE.Vector3(0, 0, 1), 0);
+
+  // Apply to camera
+  camera.position.copy(center.clone().add(offset));
+
+  // Make camera look at model
   control.target.copy(center);
   control.update();
 });
-
-camera.position.set(3527, 2025, 50);
-control.update();
 
 let step = 0;
 let speed = 0.05;
